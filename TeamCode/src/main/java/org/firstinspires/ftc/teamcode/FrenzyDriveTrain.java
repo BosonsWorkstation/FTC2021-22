@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 public class FrenzyDriveTrain {
 
@@ -26,6 +30,8 @@ public class FrenzyDriveTrain {
     protected DcMotor back_left_wheel = null;
     protected DcMotor back_right_wheel = null;
     protected DcMotor front_right_wheel = null;
+    protected DcMotor arm = null;
+    protected Servo armServo = null;
 
     private static BNO055IMU imu;
 
@@ -35,15 +41,21 @@ public class FrenzyDriveTrain {
         back_right_wheel = hardwareMap.dcMotor.get("Back_Right_Wheel");
         front_right_wheel = hardwareMap.dcMotor.get("Front_Right_Wheel");
 
+        arm = hardwareMap.dcMotor.get("Arm");
+
         front_left_wheel.setDirection(DcMotor.Direction.REVERSE);
         back_left_wheel.setDirection(DcMotor.Direction.REVERSE);
         front_right_wheel.setDirection(DcMotor.Direction.FORWARD);
         back_right_wheel.setDirection(DcMotor.Direction.FORWARD);
 
+        arm.setDirection(DcMotor.Direction.FORWARD);
+
         front_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         front_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_left_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -53,6 +65,9 @@ public class FrenzyDriveTrain {
         back_left_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_right_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -67,6 +82,12 @@ public class FrenzyDriveTrain {
         imu.initialize(parameters);
     }
 
+    public void initializeServos () {
+        this.armServo = hardwareMap.servo.get("Arm_Servo");
+    }
+
+
+
     public enum DirectionEnum{
         NORTH(90), SOUTH(-90), EAST(180), WEST(0);
         private double correction;
@@ -78,36 +99,15 @@ public class FrenzyDriveTrain {
         }
     }
 
-    public void simpleF(double simplePower){
-        front_left_wheel.setPower(-simplePower);
-        back_left_wheel.setPower(-simplePower);
-        back_right_wheel.setPower(-simplePower);
-        front_right_wheel.setPower(-simplePower);
+    public void runArmServo(){
+        if(armServo.getPosition() > 0.2){
+            armServo.setPosition(0.0);
+        }
+        else{
+            armServo.setPosition(0.3);
+        }
     }
-    public void simpleL(double simplePower){
-        front_left_wheel.setPower(simplePower);
-        back_left_wheel.setPower(-simplePower);
-        back_right_wheel.setPower(simplePower);
-        front_right_wheel.setPower(-simplePower);
-    }
-    public void simpleB(double simplePower){
-        front_left_wheel.setPower(simplePower);
-        back_left_wheel.setPower(simplePower);
-        back_right_wheel.setPower(simplePower);
-        front_right_wheel.setPower(simplePower);
-    }
-    public void simpleR(double simplePower){
-        front_left_wheel.setPower(-simplePower);
-        back_left_wheel.setPower(simplePower);
-        back_right_wheel.setPower(-simplePower);
-        front_right_wheel.setPower(simplePower);
-    }
-    public void simpleRotate(double simplePower){
-        front_left_wheel.setPower(-simplePower);
-        back_left_wheel.setPower(-simplePower);
-        back_right_wheel.setPower(simplePower);
-        front_right_wheel.setPower(simplePower);
-    }
+
 
     public void stopNow(){
         front_left_wheel.setPower(0);
@@ -145,14 +145,12 @@ public class FrenzyDriveTrain {
         }
         gyroAngle = -1 * gyroAngle;
 
-//        if (gamepad1.right_bumper) { //Disables gyro, sets to -Math.PI/2 so front is defined correctly.
-//            gyroAngle = -Math.PI / 2;
-//        }
         //MOVEMENT
         theta = Math.atan2(stick_y, stick_x) - gyroAngle - (Math.PI / 2);
         Px = Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)) * (Math.sin(theta + Math.PI / 4));
         Py = Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)) * (Math.sin(theta - Math.PI / 4));
 
+        telemetry.addData("arm position", arm.getTargetPosition());
         telemetry.addData("crab val", crabValue);
         telemetry.addData("move val", moveValue);
         telemetry.addData("turn val", turnValue);
@@ -161,6 +159,7 @@ public class FrenzyDriveTrain {
         telemetry.addData("Back Left", Px - Protate);
         telemetry.addData("Back Right", Py + Protate);
         telemetry.addData("Front Right", Px + Protate);
+        telemetry.addData("Gyro Angle", imu.getAngularOrientation());
 
         front_left_wheel.setPower(Py - Protate);
         back_left_wheel.setPower(Px - Protate);
@@ -168,6 +167,37 @@ public class FrenzyDriveTrain {
         front_right_wheel.setPower(Px + Protate);
         telemetry.update();
 
+    }
+
+    public void simpleF(double simplePower){
+        front_left_wheel.setPower(-simplePower);
+        back_left_wheel.setPower(-simplePower);
+        back_right_wheel.setPower(-simplePower);
+        front_right_wheel.setPower(-simplePower);
+    }
+    public void simpleL(double simplePower){
+        front_left_wheel.setPower(simplePower);
+        back_left_wheel.setPower(-simplePower);
+        back_right_wheel.setPower(simplePower);
+        front_right_wheel.setPower(-simplePower);
+    }
+    public void simpleB(double simplePower){
+        front_left_wheel.setPower(simplePower);
+        back_left_wheel.setPower(simplePower);
+        back_right_wheel.setPower(simplePower);
+        front_right_wheel.setPower(simplePower);
+    }
+    public void simpleR(double simplePower){
+        front_left_wheel.setPower(-simplePower);
+        back_left_wheel.setPower(simplePower);
+        back_right_wheel.setPower(-simplePower);
+        front_right_wheel.setPower(simplePower);
+    }
+    public void simpleRotate(double simplePower){
+        front_left_wheel.setPower(-simplePower);
+        back_left_wheel.setPower(-simplePower);
+        back_right_wheel.setPower(simplePower);
+        front_right_wheel.setPower(simplePower);
     }
 
     public double getHeading(){
@@ -181,7 +211,19 @@ public class FrenzyDriveTrain {
         }
         heading = heading - reset_angle;
         return heading;
+
     }
+
+    public void armUp() {
+        double upBy = 0.5;
+        arm.setPower(upBy);
+    }
+
+    public void armDown() {
+        double downBy = 0.5;
+        arm.setPower(downBy);
+    }
+
 
     //Autonomous Code
     public void autoMove(int distance, double power, boolean rampDown) {
