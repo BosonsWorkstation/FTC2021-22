@@ -157,7 +157,7 @@ public class FrenzyDriveTrain {
         telemetry.addData("Magnitude", Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)));
         telemetry.addData("Front Left", Py - Protate);
         telemetry.addData("Back Left", Px - Protate);
-        telemetry.addData("Back Right", Py + Protate);
+        telemetry.addData("Back Right", Py + Protate); 
         telemetry.addData("Front Right", Px + Protate);
         telemetry.addData("Gyro Angle", imu.getAngularOrientation());
 
