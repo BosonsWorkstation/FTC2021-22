@@ -80,9 +80,11 @@ public class FrenzyDriveTrain {
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
         imu.initialize(parameters);
+
+        this.initializeServos(hardwareMap);
     }
 
-    public void initializeServos () {
+    public void initializeServos(HardwareMap hardwareMap) {
         this.armServo = hardwareMap.servo.get("Arm_Servo");
     }
 
@@ -99,13 +101,29 @@ public class FrenzyDriveTrain {
         }
     }
 
-    public void runArmServo(){
-        if(armServo.getPosition() > 0.2){
-            armServo.setPosition(0.0);
+    public void runArmServo(boolean armServoOpen){
+        if(armServoOpen){
+            armServo.setPosition(0.3);
+            return;
         }
         else{
-            armServo.setPosition(0.3);
+            armServo.setPosition(0.0);
+            return;
         }
+    }
+
+    public void armUp() {
+        double upBy = 0.1;
+        arm.setPower(upBy);
+    }
+
+    public void armDown() {
+        double downBy = -0.1;
+        arm.setPower(downBy);
+    }
+
+    public void armStop() {
+        arm.setPower(0);
     }
 
 
@@ -157,7 +175,7 @@ public class FrenzyDriveTrain {
         telemetry.addData("Magnitude", Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)));
         telemetry.addData("Front Left", Py - Protate);
         telemetry.addData("Back Left", Px - Protate);
-        telemetry.addData("Back Right", Py + Protate); 
+        telemetry.addData("Back Right", Py + Protate);
         telemetry.addData("Front Right", Px + Protate);
         telemetry.addData("Gyro Angle", imu.getAngularOrientation());
 
@@ -214,15 +232,7 @@ public class FrenzyDriveTrain {
 
     }
 
-    public void armUp() {
-        double upBy = 0.5;
-        arm.setPower(upBy);
-    }
 
-    public void armDown() {
-        double downBy = 0.5;
-        arm.setPower(downBy);
-    }
 
 
     //Autonomous Code

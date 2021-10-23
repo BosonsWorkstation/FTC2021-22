@@ -23,6 +23,9 @@ public class FrenzyTeleop extends LinearOpMode {
         this.driveTrain.getHeading();
         this.driveTrain.reset_angle();
 
+        boolean armServoOpen = false;
+        driveTrain.armServo.setPosition(0.3);
+
 
         waitForStart();
         while (opModeIsActive()) {
@@ -71,15 +74,25 @@ public class FrenzyTeleop extends LinearOpMode {
                 this.driveTrain.simpleR(simplePower);
             }
 
-            if (gamepad1.x){
-                this.driveTrain.runArmServo();
+            if (gamepad2.x){
+                this.driveTrain.runArmServo(armServoOpen);
+                sleep(250);
+                if(armServoOpen){
+                    armServoOpen = false;
+                }
+                else{
+                    armServoOpen = true;
+                }
             }
 
             if (gamepad2.dpad_up){
                 this.driveTrain.armUp();
             }
-            if (gamepad2.dpad_up){
+            if (gamepad2.dpad_down){
                 this.driveTrain.armDown();
+            }
+            if (!gamepad2.dpad_up && !gamepad2.dpad_down){
+                this.driveTrain.armStop();
             }
 
             }
