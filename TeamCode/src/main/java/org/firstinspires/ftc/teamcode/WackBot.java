@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+//import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -17,11 +17,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
-public class FrenzyDriveTrain {
+public class WackBot {
 
     private final Telemetry telemetry;
 
-    public FrenzyDriveTrain(HardwareMap hardwareMap, Telemetry telemetry, org.firstinspires.ftc.teamcode.FrenzyDriveTrain.DirectionEnum direction) {
+    public WackBot(HardwareMap hardwareMap, Telemetry telemetry, org.firstinspires.ftc.teamcode.WackBot.DirectionEnum direction) {
         this.telemetry = telemetry;
         this.correction_factor = direction.getCorrection();
     }
@@ -36,21 +36,15 @@ public class FrenzyDriveTrain {
     protected DcMotor front_right_wheel = null;
 
     protected DcMotor arm = null;
-    protected DcMotor linearL = null;
-    protected DcMotor linearR = null;
+//    protected DcMotor linearL = null;
+//    protected DcMotor linearR = null;
     protected DcMotor fly = null;
 
-//    protected Servo armServoL = null;
-    protected Servo armServoR = null;
+    protected Servo armServoL = null;
+//    protected Servo armServoR = null;
 
     private static BNO055IMU imu;
-    protected ColorSensor linearColor = null;
-
-    public void initialize(HardwareMap hardwareMap, Telemetry telemetry){
-        initializeDriveMotors(hardwareMap);
-        initializeSensors(hardwareMap);
-        initializeServos(hardwareMap);
-    }
+//    protected ColorSensor linearColor = null;
 
     public void initializeDriveMotors(HardwareMap hardwareMap) {
         front_left_wheel = hardwareMap.dcMotor.get("front_left_wheel");
@@ -60,8 +54,6 @@ public class FrenzyDriveTrain {
 
         arm = hardwareMap.dcMotor.get("Arm");
 
-        linearL = hardwareMap.dcMotor.get("Linear_L");
-        linearR = hardwareMap.dcMotor.get("Linear_R");
         fly = hardwareMap.dcMotor.get("fly");
 
         front_left_wheel.setDirection(DcMotor.Direction.FORWARD);
@@ -72,8 +64,8 @@ public class FrenzyDriveTrain {
         arm.setDirection(DcMotor.Direction.FORWARD);
         fly.setDirection(DcMotor.Direction.REVERSE);
 
-        linearL.setDirection(DcMotor.Direction.FORWARD);
-        linearR.setDirection(DcMotor.Direction.FORWARD);
+//        linearL.setDirection(DcMotor.Direction.FORWARD);
+//        linearR.setDirection(DcMotor.Direction.FORWARD);
 
         front_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -81,7 +73,7 @@ public class FrenzyDriveTrain {
         back_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         front_left_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_left_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -96,11 +88,11 @@ public class FrenzyDriveTrain {
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fly.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fly.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        linearL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linearL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        linearR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linearR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//        linearL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        linearL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        linearR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        linearR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -122,12 +114,11 @@ public class FrenzyDriveTrain {
     }
 
     public void initializeSensors(HardwareMap hardwareMap) {
-        this.linearColor = hardwareMap.colorSensor.get("Linear_Color");
+//        this.linearColor = hardwareMap.colorSensor.get("Linear_Color");
     }
 
     public void initializeServos(HardwareMap hardwareMap) {
-//        this.armServoL = hardwareMap.servo.get("Arm_Servo_L");
-        this.armServoR = hardwareMap.servo.get("Arm_Servo_R");
+        this.armServoL = hardwareMap.servo.get("Arm_Servo");
     }
 
 
@@ -149,18 +140,18 @@ public class FrenzyDriveTrain {
 
     public void runArmServo(boolean armServoOpen){
         if(armServoOpen){
-//            armServoL.setPosition(0.75);
+            armServoL.setPosition(0.75);
             //ADIN ARM
-            armServoR.setPosition(0.30);
+//            armServoR.setPosition(0.10);
             //LUKE ARM
 //            armServoR.setPosition(0.5);
 
             return;
         }
         else{
-//            armServoL.setPosition(1.0);
+            armServoL.setPosition(1.0);
             //ADIN ARM
-            armServoR.setPosition(0.00);
+//            armServoR.setPosition(0.00);
             //LUKE ARM
 //            armServoR.setPosition(0.75);
             return;
@@ -168,20 +159,15 @@ public class FrenzyDriveTrain {
     }
 
     public void linear(double power){
-            linearR.setPower(power);
-            linearL.setPower(power);
+//        linearR.setPower(power);
+//        linearL.setPower(power);
     }
 
     public void linearStop(){
-        linearL.setPower(0);
-        linearR.setPower(0);
+//        linearL.setPower(0);
+//        linearR.setPower(0);
     }
 
-    public void linearAuto(double power){
-        if(linearColor.blue() < 1000){
-            linear(power);
-        }
-    }
 
     public void armUp() {
         arm.setPower(-0.1);
@@ -255,7 +241,7 @@ public class FrenzyDriveTrain {
 //        telemetry.addData("crab val", crabValue);
 //        telemetry.addData("move val", moveValue);
 //        telemetry.addData("turn val", turnValue);
-        telemetry.addData("Blue Val", linearColor.blue());
+//        telemetry.addData("Blue Val", linearColor.blue());
         telemetry.addData("Magnitude", Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)));
         telemetry.addData("Front Left", Py - Protate);
         telemetry.addData("Back Left", Px - Protate);
@@ -267,7 +253,7 @@ public class FrenzyDriveTrain {
 
     }
 
-//    public void simpleF(double simplePower){
+    //    public void simpleF(double simplePower){
 //        front_left_wheel.setPower(-simplePower);
 //        back_left_wheel.setPower(-simplePower);
 //        back_right_wheel.setPower(-simplePower);
@@ -315,50 +301,43 @@ public class FrenzyDriveTrain {
 
 
     //Autonomous Code
-    public void autoCrab(int distance, double power, boolean rampDown) {
-
-        telemetry.addData("frontL pos", front_left_wheel.getCurrentPosition());
-        telemetry.update();
-        int frontLeftPosition = front_left_wheel.getCurrentPosition();
-        int frontRightPosition= front_right_wheel.getCurrentPosition();
-        int backLeftPosition =  back_left_wheel.getCurrentPosition();
-        int backRightPosition  = back_right_wheel.getCurrentPosition();
-
-        double rampDownPercent = 0.8;
-
-        front_left_wheel.setTargetPosition(frontLeftPosition + distance);
-        front_right_wheel.setTargetPosition(frontRightPosition + distance);
-        back_left_wheel.setTargetPosition(backLeftPosition + distance);
-        back_right_wheel.setTargetPosition(backRightPosition + distance);
-
-        front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        front_left_wheel.setPower(power);
-        front_right_wheel.setPower(power);
-        back_left_wheel.setPower(power);
-        back_right_wheel.setPower(power);
-
-        while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
-//        while(front_left_wheel.isBusy()){
-            sleep(5);
-            telemetry.addData("frontL pos 2", front_left_wheel.getCurrentPosition());
-            if (rampDown) {
-                if (front_right_wheel.getPower() > 0.2 && Math.abs(distance) > 400) {
-                    if (Math.abs(front_right_wheel.getTargetPosition() - front_right_wheel.getCurrentPosition()) < 400) {
-                        front_right_wheel.setPower(front_right_wheel.getPower() * rampDownPercent);
-                        front_left_wheel.setPower(front_left_wheel.getPower() * rampDownPercent);
-                        back_left_wheel.setPower(back_left_wheel.getPower() * rampDownPercent);
-                        back_right_wheel.setPower(back_right_wheel.getPower() * rampDownPercent);
-                    }
-                }
-            }
-        }
-        stopNow();
-    }
+//    public void autoCrab(int distance, double power, boolean rampDown) {
+//        int frontLeftPosition = front_left_wheel.getCurrentPosition();
+//        int frontRightPosition= front_right_wheel.getCurrentPosition();
+//        int backLeftPosition =  back_left_wheel.getCurrentPosition();
+//        int backRightPosition  = back_right_wheel.getCurrentPosition();
+//
+//        double rampDownPercent = 0.8;
+//
+//        front_left_wheel.setTargetPosition(frontLeftPosition + distance);
+//        front_right_wheel.setTargetPosition(frontRightPosition + distance);
+//        back_left_wheel.setTargetPosition(backLeftPosition + distance);
+//        back_right_wheel.setTargetPosition(backRightPosition + distance);
+//
+//        front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        front_left_wheel.setPower(power);
+//        front_right_wheel.setPower(power);
+//        back_left_wheel.setPower(power);
+//        back_right_wheel.setPower(power);
+//
+//        while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
+//            sleep(5);
+////            if (rampDown) {
+////                if (front_right_wheel.getPower() > 0.2 && Math.abs(distance) > 400) {
+////                    if (Math.abs(front_right_wheel.getTargetPosition() - front_right_wheel.getCurrentPosition()) < 400) {
+////                        front_right_wheel.setPower(front_right_wheel.getPower() * rampDownPercent);
+////                        front_left_wheel.setPower(front_left_wheel.getPower() * rampDownPercent);
+////                        back_left_wheel.setPower(back_left_wheel.getPower() * rampDownPercent);
+////                        back_right_wheel.setPower(back_right_wheel.getPower() * rampDownPercent);
+//        }
+////                }
+////            }
+////        }
+//    }
 
     private void sleep(long ms){
         try {

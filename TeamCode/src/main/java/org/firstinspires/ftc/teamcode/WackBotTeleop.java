@@ -3,19 +3,19 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Frenzy Teleop", group = "Linear Opmode")
-public class FrenzyTeleop extends LinearOpMode {
+@TeleOp(name = "WackBot Teleop", group = "Linear Opmode")
+public class WackBotTeleop extends LinearOpMode {
 
 
-    private FrenzyDriveTrain driveTrain;
-    private static final FrenzyDriveTrain.DirectionEnum direction = FrenzyDriveTrain.DirectionEnum.SOUTH;
+    private WackBot driveTrain;
+    private static final WackBot.DirectionEnum direction = WackBot.DirectionEnum.SOUTH;
 //   private static final FrenzyDriveTrain.DirectionEnum direction = FrenzyDriveTrain.DirectionEnum.WEST;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
 
-        this.driveTrain = new FrenzyDriveTrain(this.hardwareMap, this.telemetry, direction);
+        this.driveTrain = new WackBot(this.hardwareMap, this.telemetry, direction);
 
 //        this.driveTrain.initializeGyro(hardwareMap, telemetry);
 //        this.driveTrain.initializeMotors(hardwareMap, telemetry);
@@ -92,15 +92,15 @@ public class FrenzyTeleop extends LinearOpMode {
 
             if (gamepad2.right_trigger > 0) {
                 power = gamepad2.right_trigger;
-
-                if (driveTrain.linearColor.blue() > 1000) {
-                    driveTrain.linearStop();
-                } else {
-                    if (power > 0.4) {
-                        power = 0.4;
-                    }
+//
+//                if (driveTrain.linearColor.blue() > 1000) {
+//                    driveTrain.linearStop();
+//                } else {
+//                    if (power > 0.4) {
+//                        power = 0.4;
+//                    }
                     driveTrain.linear(power / 4);
-                }
+//                }
             }
 
             if (gamepad2.left_trigger > 0) {
@@ -165,7 +165,7 @@ public class FrenzyTeleop extends LinearOpMode {
             }
 
             if (gamepad1.b) {
-                this.driveTrain.autoCrab(100, 0.5, true);
+//                this.driveTrain.autoCrab(100, 0.5, true);
                 this.driveTrain.stopNow();
             }
 
@@ -173,7 +173,7 @@ public class FrenzyTeleop extends LinearOpMode {
         }
 
     }
-    public void armThread(final FrenzyDriveTrain driveTrain) {
+    public void armThread(final WackBot driveTrain) {
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -195,6 +195,6 @@ public class FrenzyTeleop extends LinearOpMode {
         });
         t1.start();
     }
-    }
+}
 
 
