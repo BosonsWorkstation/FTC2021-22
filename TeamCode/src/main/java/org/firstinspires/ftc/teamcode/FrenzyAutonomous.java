@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class FrenzyAutonomous extends LinearOpMode {
 
     private FrenzyDriveTrain driveTrain;
-    private static final FrenzyDriveTrain.DirectionEnum direction = FrenzyDriveTrain.DirectionEnum.SOUTH;
+    private static final FrenzyDriveTrain.DirectionEnum direction = FrenzyDriveTrain.DirectionEnum.WEST;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,11 +20,15 @@ public class FrenzyAutonomous extends LinearOpMode {
 
         waitForStart();
 
-        this.driveTrain.autoCrab(1000,.5,true);
+//        this.driveTrain.autoCrab(100,.5,true);
+        sleep(100);
+
+//        this.driveTrain.autoMove(100, 0.5, true);
         sleep(100);
 
         this.driveTrain.linearAuto(0.3);
         sleep(1000);
+        this.driveTrain.linearStop();
 
 
     }

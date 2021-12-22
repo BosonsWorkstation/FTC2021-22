@@ -84,13 +84,13 @@ public class FrenzyDriveTrain {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         front_left_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_left_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        front_left_wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         front_right_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_right_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        front_right_wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         back_left_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_left_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_left_wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         back_right_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_right_wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_right_wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -160,7 +160,7 @@ public class FrenzyDriveTrain {
         else{
 //            armServoL.setPosition(1.0);
             //ADIN ARM
-            armServoR.setPosition(0.00);
+            armServoR.setPosition(0.60);
             //LUKE ARM
 //            armServoR.setPosition(0.75);
             return;
@@ -219,9 +219,6 @@ public class FrenzyDriveTrain {
 
 
     public void drive(double crabValue, double moveValue, double turnValue, double maxPower) {
-//        double Protate = gamepad1.right_stick_x / 4;
-//        double stick_x = gamepad1.left_stick_x * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2); //Accounts for Protate when limiting magnitude to be less than 1
-//        double stick_y = gamepad1.left_stick_y * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2);
         double Protate = turnValue;
         double stick_x = crabValue * Math.sqrt(Math.pow(1-Math.abs(Protate), 2)/2); //Accounts for Protate when limiting magnitude to be less than 1
         double stick_y = moveValue * Math.sqrt(Math.pow(1-Math.abs(Protate), 2)/2);
@@ -238,7 +235,6 @@ public class FrenzyDriveTrain {
             gyroAngle = gyroAngle - (3 * Math.PI / 2);
         }
         gyroAngle = -1 * gyroAngle;
-
 
         theta = Math.atan2(stick_y, stick_x) - gyroAngle - (Math.PI / 2);
         Px = Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)) * (Math.sin(theta + Math.PI / 4));
@@ -257,6 +253,8 @@ public class FrenzyDriveTrain {
 //        telemetry.addData("turn val", turnValue);
         telemetry.addData("Blue Val", linearColor.blue());
         telemetry.addData("Magnitude", Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)));
+        telemetry.addData("crab val", crabValue);
+        telemetry.addData("move val", moveValue);
         telemetry.addData("Front Left", Py - Protate);
         telemetry.addData("Back Left", Px - Protate);
         telemetry.addData("Back Right", Py + Protate);
@@ -315,10 +313,51 @@ public class FrenzyDriveTrain {
 
 
     //Autonomous Code
+    public void rampDown(double distance, double rampDownPercent){
+        if (front_right_wheel.getPower() > 0.2 && Math.abs(distance) > 400) {
+            if (Math.abs(front_right_wheel.getTargetPosition() - front_right_wheel.getCurrentPosition()) < 400) {
+                front_right_wheel.setPower(front_right_wheel.getPower() * rampDownPercent);
+                front_left_wheel.setPower(front_left_wheel.getPower() * rampDownPercent);
+                back_left_wheel.setPower(back_left_wheel.getPower() * rampDownPercent);
+                back_right_wheel.setPower(back_right_wheel.getPower() * rampDownPercent);
+            }
+        }
+    }
+    public void autoMove(int distance, double power, boolean rampDown) {
+
+        int frontLeftPosition = front_left_wheel.getCurrentPosition();
+        int frontRightPosition= front_right_wheel.getCurrentPosition();
+        int backLeftPosition =  back_left_wheel.getCurrentPosition();
+        int backRightPosition  = back_right_wheel.getCurrentPosition();
+
+        double rampDownPercent = 0.8;
+
+        front_left_wheel.setTargetPosition(frontLeftPosition + distance);
+        front_right_wheel.setTargetPosition(frontRightPosition + distance);
+        back_left_wheel.setTargetPosition(backLeftPosition - distance);
+        back_right_wheel.setTargetPosition(backRightPosition - distance);
+
+        front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        front_left_wheel.setPower(power);
+        front_right_wheel.setPower(power);
+        back_left_wheel.setPower(power);
+        back_right_wheel.setPower(power);
+
+        while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
+            sleep(5);
+            if (rampDown) {
+                rampDown(distance, rampDownPercent);
+            }
+        }
+        stopNow();
+    }
+
     public void autoCrab(int distance, double power, boolean rampDown) {
 
-        telemetry.addData("frontL pos", front_left_wheel.getCurrentPosition());
-        telemetry.update();
         int frontLeftPosition = front_left_wheel.getCurrentPosition();
         int frontRightPosition= front_right_wheel.getCurrentPosition();
         int backLeftPosition =  back_left_wheel.getCurrentPosition();
@@ -336,25 +375,15 @@ public class FrenzyDriveTrain {
         back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
         front_left_wheel.setPower(power);
         front_right_wheel.setPower(power);
         back_left_wheel.setPower(power);
         back_right_wheel.setPower(power);
 
         while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
-//        while(front_left_wheel.isBusy()){
             sleep(5);
-            telemetry.addData("frontL pos 2", front_left_wheel.getCurrentPosition());
             if (rampDown) {
-                if (front_right_wheel.getPower() > 0.2 && Math.abs(distance) > 400) {
-                    if (Math.abs(front_right_wheel.getTargetPosition() - front_right_wheel.getCurrentPosition()) < 400) {
-                        front_right_wheel.setPower(front_right_wheel.getPower() * rampDownPercent);
-                        front_left_wheel.setPower(front_left_wheel.getPower() * rampDownPercent);
-                        back_left_wheel.setPower(back_left_wheel.getPower() * rampDownPercent);
-                        back_right_wheel.setPower(back_right_wheel.getPower() * rampDownPercent);
-                    }
-                }
+                rampDown(distance, rampDownPercent);
             }
         }
         stopNow();

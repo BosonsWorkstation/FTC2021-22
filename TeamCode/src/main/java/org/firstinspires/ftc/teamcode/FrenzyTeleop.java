@@ -51,20 +51,20 @@ public class FrenzyTeleop extends LinearOpMode {
 
 //                crabValue = -gamepad1.left_stick_x * 1.5;
 //                moveValue = -gamepad1.left_stick_y * 1.5;
-                crabValue = gamepad1.left_stick_x;
-                moveValue = gamepad1.left_stick_y;
+                crabValue = gamepad1.left_stick_x * 2;
+                moveValue = gamepad1.left_stick_y * 2;
                 turnValue = gamepad1.right_stick_x;
 
             }
-            if(crabValue > maxPower){
-                crabValue = maxPower;
-            }
-            if(moveValue > maxPower){
-                moveValue = maxPower;
-            }
-            if(turnValue > maxPower){
-                turnValue = maxPower;
-            }
+//            if(crabValue > maxPower){
+//                crabValue = maxPower;
+//            }
+//            if(moveValue > maxPower){
+//                moveValue = maxPower;
+//            }
+//            if(turnValue > maxPower){
+//                turnValue = maxPower;
+//            }
 
             this.driveTrain.drive(crabValue, moveValue, turnValue, maxPower);
             idle();
@@ -165,7 +165,7 @@ public class FrenzyTeleop extends LinearOpMode {
             }
 
             if (gamepad1.b) {
-                this.driveTrain.autoCrab(100, 0.5, true);
+//                this.driveTrain.autoCrab(100, 0.5, true);
                 this.driveTrain.stopNow();
             }
 

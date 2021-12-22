@@ -165,8 +165,9 @@ public class WackBotTeleop extends LinearOpMode {
             }
 
             if (gamepad1.b) {
-//                this.driveTrain.autoCrab(100, 0.5, true);
-                this.driveTrain.stopNow();
+                driveTrain.runArmServo(true);
+                sleep(20);
+                driveTrain.runArmServo(false);
             }
 
 
