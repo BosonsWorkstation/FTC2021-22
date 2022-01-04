@@ -18,17 +18,42 @@ public class FrenzyAutonomous extends LinearOpMode {
         this.driveTrain.getHeading();
         this.driveTrain.reset_angle();
 
+        this.driveTrain.runArmServo(false);
+
         waitForStart();
 
-//        this.driveTrain.autoCrab(100,.5,true);
-        sleep(100);
+        this.driveTrain.autoMove(500,.5,true);
+        sleep(500);
 
-//        this.driveTrain.autoMove(100, 0.5, true);
-        sleep(100);
+        this.driveTrain.autoCrab(1350, 0.5, true);
+        sleep(500);
 
-        this.driveTrain.linearAuto(0.3);
-        sleep(1000);
-        this.driveTrain.linearStop();
+        this.driveTrain.runFly();
+        sleep(3000);
+        this.driveTrain.flyStop();
+
+        this.driveTrain.autoCrab(-3500, 0.5, true);
+        sleep(500);
+
+        this.driveTrain.autoRotate(-200, 0.8, false);
+        sleep(500);
+
+        this.driveTrain.autoMove(400, 0.5, false);
+
+        this.driveTrain.autoLinearUp(0.2);
+        sleep(2000);
+
+        this.driveTrain.runArmServo(false);
+
+        this.driveTrain.autoCrab(-1000, 0.5, true);
+        sleep(500);
+
+        this.driveTrain.autoMove(1000, 0.5, true);
+        sleep(500);
+
+        this.driveTrain.autoCrab(-3000, 0.8, false);
+
+
 
 
     }

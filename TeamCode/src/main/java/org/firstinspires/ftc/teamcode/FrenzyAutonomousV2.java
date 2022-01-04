@@ -37,9 +37,9 @@ public class FrenzyAutonomousV2<allAvg> extends LinearOpMode//extends EasyOpenCV
     public int[] threeAvg;
 
 
-    boolean markerPositionFirst = false;
-    boolean markerPositionSecond = false;
-    boolean markerPositionThird = false;
+    int average1;
+    int average2;
+    int average3;
 
     //60, 220
     double CAMERA_X_POSITION = 60;
@@ -58,10 +58,11 @@ public class FrenzyAutonomousV2<allAvg> extends LinearOpMode//extends EasyOpenCV
         pipeline = new SkystoneDeterminationPipeline(xPosition, yPosition);
     }
 
-    protected void initOpMode(double xPosition, double yPosition){
+    public void initOpMode(double xPosition, double yPosition){
 
         FrenzyDriveTrain driveTrain;
         FrenzyDriveTrain.DirectionEnum direction = FrenzyDriveTrain.DirectionEnum.SOUTH;
+
         this.createPipeline(xPosition, yPosition);
         this.driveTrain = new FrenzyDriveTrain(this.hardwareMap, this.telemetry, direction);
         this.driveTrain.initialize(hardwareMap, telemetry);
@@ -171,18 +172,20 @@ public class FrenzyAutonomousV2<allAvg> extends LinearOpMode//extends EasyOpenCV
 
 
 //            double markerOneVal = (int) Core.mean(region1_Cb).val[0];
-            telemetry.addData("avg1", pipeline.avg1);
+            telemetry.addData("average1", pipeline.avg1);
+            createPipeline(CAMERA_X_POSITION + 220, CAMERA_Y_POSITION);
+            telemetry.addData("avg1", average1);
+            telemetry.addData("avg2", average2);
+            telemetry.addData("avg3", average3);
             telemetry.update();
 
-            this.createPipeline(CAMERA_X_POSITION + 220, CAMERA_Y_POSITION);
 //            SkystoneDeterminationPipeline.MarkerPosition markerPosition2 = getMarkerPosition();
 //            double markerTwoVal = pipeline.avg1;
-            telemetry.addData("avg1", threeAvg[0]);
-            telemetry.addData("avg2", threeAvg[1]);
-            telemetry.addData("avg3", threeAvg[2]);
-            telemetry.update();
+
+//            telemetry.addData("avg2", threeAvg[1]);
+//            telemetry.addData("avg3", threeAvg[2]);
 //
-//            this.createPipeline(CAMERA_X_POSITION + 440, CAMERA_Y_POSITION);
+            this.createPipeline(CAMERA_X_POSITION + 440, CAMERA_Y_POSITION);
 //            SkystoneDeterminationPipeline.MarkerPosition markerPosition3 = getMarkerPosition();
 //            double markerThreeVal = pipeline.avg1;
 //            telemetry.addData("avg3", pipeline.avg1);
@@ -267,6 +270,7 @@ public class FrenzyAutonomousV2<allAvg> extends LinearOpMode//extends EasyOpenCV
 
         int avg1;
         int i = 0;
+        boolean detected = false;
 
         // Volatile since accessed by OpMode thread w/o synchronization
 //        public volatile MarkerPosition position = MarkerPosition.ONE;
@@ -280,8 +284,6 @@ public class FrenzyAutonomousV2<allAvg> extends LinearOpMode//extends EasyOpenCV
             this.region1_pointB = new Point(
                     REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
                     REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            threeAvg[i] = avg1;
-
         }
         /*
          * This function takes the RGB frame, converts to YCrCb,
@@ -309,13 +311,13 @@ public class FrenzyAutonomousV2<allAvg> extends LinearOpMode//extends EasyOpenCV
 
 
 
-//            for (int i = 0; i > 2; i++) {
-//                inputToCb(input);
+            //for (int i = 0; i > 2; i++) {
+                inputToCb(input);
 
                 avg1 = (int) Core.mean(region1_Cb).val[0];
 
-//                threeAvg[i] = avg1;
-//            }
+                //threeAvg[i] = avg1;
+            //}
 
 
             i++;
@@ -327,9 +329,9 @@ public class FrenzyAutonomousV2<allAvg> extends LinearOpMode//extends EasyOpenCV
                     2); // Thickness of the rectangle lines
 
 
-//            if(avg1 > markerTrue) {
-//                position = MarkerPosition.THREE;
-//            }
+            if(avg1 > 1) {
+                detected = true;
+            }
 
 
             Imgproc.rectangle(
