@@ -44,7 +44,8 @@ public class FrenzyDriveTrain {
     protected Servo armServoR = null;
 
     private static BNO055IMU imu;
-    protected ColorSensor linearColor = null;
+    protected ColorSensor linearColorTop = null;
+    protected ColorSensor linearColorDown = null;
 
     public void initialize(HardwareMap hardwareMap, Telemetry telemetry){
         initializeDriveMotors(hardwareMap);
@@ -122,7 +123,8 @@ public class FrenzyDriveTrain {
     }
 
     public void initializeSensors(HardwareMap hardwareMap) {
-        this.linearColor = hardwareMap.colorSensor.get("Linear_Color");
+        this.linearColorTop = hardwareMap.colorSensor.get("Linear_Color_Top");
+        this.linearColorDown = hardwareMap.colorSensor.get("Linear_Color_Down");
     }
 
     public void initializeServos(HardwareMap hardwareMap) {
@@ -148,22 +150,22 @@ public class FrenzyDriveTrain {
     }
 
     public void runArmServo(boolean armServoOpen){
-        if(armServoOpen){
+        if(armServoOpen == true){
 //            armServoL.setPosition(0.75);
             //ADIN ARM
 //            armServoR.setPosition(0.30);
             //LUKE ARM
-            armServoR.setPosition(0.1);
+            armServoR.setPosition(0.5);
 
-            return;
+//            return;
         }
-        else{
+        if(armServoOpen == false){
 //            armServoL.setPosition(1.0);
             //ADIN ARM
 //            armServoR.setPosition(0.50);
             //LUKE ARM
-            armServoR.setPosition(0.75);
-            return;
+            armServoR.setPosition(0.3);
+//            return;
         }
     }
 
@@ -172,12 +174,28 @@ public class FrenzyDriveTrain {
             linearL.setPower(power);
     }
 
-    public void autoLinearUp(double power){
-        while(linearColor.blue() < 900){
+    public void autoLinearUp(double power, long time){
+        while(linearColorTop.blue() < 900) {
+            linearR.setPower(-power);
+            linearL.setPower(-power);
+
+            sleep(time);
+
+            break;
+        }
+
+
+    }
+
+    public void autoLinearDown(double power, long time){
+        while(linearColorDown.blue() < 900) {
             linearR.setPower(power);
             linearL.setPower(power);
+
+            sleep(time);
+
+            break;
         }
-        linearStop();
     }
 
     public void linearStop(){
@@ -204,7 +222,7 @@ public class FrenzyDriveTrain {
     }
 
     public void runFly(){
-        fly.setPower(0.5);
+        fly.setPower(0.38);
     }
 
     public void flyStop(){
@@ -263,7 +281,7 @@ public class FrenzyDriveTrain {
 //        telemetry.addData("crab val", crabValue);
 //        telemetry.addData("move val", moveValue);
 //        telemetry.addData("turn val", turnValue);
-        telemetry.addData("Blue Val", linearColor.blue());
+        telemetry.addData("Blue Val", linearColorTop.blue());
         telemetry.addData("Magnitude", Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)));
         telemetry.addData("crab val", crabValue);
         telemetry.addData("move val", moveValue);

@@ -42,18 +42,18 @@ public class WackBotTeleop extends LinearOpMode {
             if (gamepad1.left_bumper) {
                 maxPower = 0.4;
 
-                crabValue = gamepad1.left_stick_x / 4;
-                moveValue = gamepad1.left_stick_y / 4;
-                turnValue = gamepad1.right_stick_x / 4;
+                crabValue = gamepad1.left_stick_x / 6;
+                moveValue = gamepad1.left_stick_y / 6;
+                turnValue = -gamepad1.right_stick_x / 6;
 
             } else {
-                maxPower = 0.8;
+                maxPower = 0.4;
 
 //                crabValue = -gamepad1.left_stick_x * 1.5;
 //                moveValue = -gamepad1.left_stick_y * 1.5;
                 crabValue = gamepad1.left_stick_x;
                 moveValue = gamepad1.left_stick_y;
-                turnValue = gamepad1.right_stick_x;
+                turnValue = -gamepad1.right_stick_x;
 
             }
             if(crabValue > maxPower){
@@ -189,7 +189,7 @@ public class WackBotTeleop extends LinearOpMode {
                             armServoOpen = true;
                         }
                     } else {
-                        sleep(20);
+                        sleep(100);
                     }
                 }
             }

@@ -40,8 +40,7 @@ public class FrenzyAutonomous extends LinearOpMode {
 
         this.driveTrain.autoMove(400, 0.5, false);
 
-        this.driveTrain.autoLinearUp(0.2);
-        sleep(2000);
+        this.driveTrain.autoLinearUp(0.2, 2000);
 
         this.driveTrain.runArmServo(false);
 

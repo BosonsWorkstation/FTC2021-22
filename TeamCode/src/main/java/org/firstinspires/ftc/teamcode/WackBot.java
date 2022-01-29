@@ -36,15 +36,13 @@ public class WackBot {
     protected DcMotor front_right_wheel = null;
 
     protected DcMotor arm = null;
-//    protected DcMotor linearL = null;
-//    protected DcMotor linearR = null;
     protected DcMotor fly = null;
 
     protected Servo armServoL = null;
 //    protected Servo armServoR = null;
 
     private static BNO055IMU imu;
-//    protected ColorSensor linearColor = null;
+
 
     public void initializeDriveMotors(HardwareMap hardwareMap) {
         front_left_wheel = hardwareMap.dcMotor.get("front_left_wheel");
@@ -63,9 +61,6 @@ public class WackBot {
 
         arm.setDirection(DcMotor.Direction.FORWARD);
         fly.setDirection(DcMotor.Direction.REVERSE);
-
-//        linearL.setDirection(DcMotor.Direction.FORWARD);
-//        linearR.setDirection(DcMotor.Direction.FORWARD);
 
         front_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -140,7 +135,7 @@ public class WackBot {
 
     public void runArmServo(boolean armServoOpen){
         if(armServoOpen){
-            armServoL.setPosition(0.3);
+            armServoL.setPosition(0.37);
             //ADIN ARM
 //            armServoR.setPosition(0.10);
             //LUKE ARM
@@ -149,7 +144,7 @@ public class WackBot {
             return;
         }
         else{
-            armServoL.setPosition(1.0);
+            armServoL.setPosition(0.7);
             //ADIN ARM
 //            armServoR.setPosition(0.00);
             //LUKE ARM
@@ -301,43 +296,116 @@ public class WackBot {
 
 
     //Autonomous Code
-//    public void autoCrab(int distance, double power, boolean rampDown) {
-//        int frontLeftPosition = front_left_wheel.getCurrentPosition();
-//        int frontRightPosition= front_right_wheel.getCurrentPosition();
-//        int backLeftPosition =  back_left_wheel.getCurrentPosition();
-//        int backRightPosition  = back_right_wheel.getCurrentPosition();
-//
-//        double rampDownPercent = 0.8;
-//
-//        front_left_wheel.setTargetPosition(frontLeftPosition + distance);
-//        front_right_wheel.setTargetPosition(frontRightPosition + distance);
-//        back_left_wheel.setTargetPosition(backLeftPosition + distance);
-//        back_right_wheel.setTargetPosition(backRightPosition + distance);
-//
-//        front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//        front_left_wheel.setPower(power);
-//        front_right_wheel.setPower(power);
-//        back_left_wheel.setPower(power);
-//        back_right_wheel.setPower(power);
-//
-//        while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
-//            sleep(5);
-////            if (rampDown) {
-////                if (front_right_wheel.getPower() > 0.2 && Math.abs(distance) > 400) {
-////                    if (Math.abs(front_right_wheel.getTargetPosition() - front_right_wheel.getCurrentPosition()) < 400) {
-////                        front_right_wheel.setPower(front_right_wheel.getPower() * rampDownPercent);
-////                        front_left_wheel.setPower(front_left_wheel.getPower() * rampDownPercent);
-////                        back_left_wheel.setPower(back_left_wheel.getPower() * rampDownPercent);
-////                        back_right_wheel.setPower(back_right_wheel.getPower() * rampDownPercent);
-//        }
-////                }
-////            }
-////        }
-//    }
+    public void rampDown(double distance, double rampDownPercent){
+        if (front_right_wheel.getPower() > 0.2 && Math.abs(distance) > 400) {
+            if (Math.abs(front_right_wheel.getTargetPosition() - front_right_wheel.getCurrentPosition()) < 400) {
+                front_right_wheel.setPower(front_right_wheel.getPower() * rampDownPercent);
+                front_left_wheel.setPower(front_left_wheel.getPower() * rampDownPercent);
+                back_left_wheel.setPower(back_left_wheel.getPower() * rampDownPercent);
+                back_right_wheel.setPower(back_right_wheel.getPower() * rampDownPercent);
+            }
+        }
+    }
+
+    public void autoMove(int distance, double power, boolean rampDown) {
+
+        int frontLeftPosition = front_left_wheel.getCurrentPosition();
+        int frontRightPosition= front_right_wheel.getCurrentPosition();
+        int backLeftPosition =  back_left_wheel.getCurrentPosition();
+        int backRightPosition  = back_right_wheel.getCurrentPosition();
+
+        double rampDownPercent = 0.8;
+
+        front_left_wheel.setTargetPosition(frontLeftPosition - distance);
+        front_right_wheel.setTargetPosition(frontRightPosition + distance);
+        back_left_wheel.setTargetPosition(backLeftPosition + distance);
+        back_right_wheel.setTargetPosition(backRightPosition - distance);
+
+        front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        front_left_wheel.setPower(power);
+        front_right_wheel.setPower(power);
+        back_left_wheel.setPower(power);
+        back_right_wheel.setPower(power);
+
+        while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
+            sleep(5);
+            if (rampDown) {
+                rampDown(distance, rampDownPercent);
+            }
+        }
+        stopNow();
+    }
+
+    public void autoCrab(int distance, double power, boolean rampDown) {
+
+        int frontLeftPosition = front_left_wheel.getCurrentPosition();
+        int frontRightPosition= front_right_wheel.getCurrentPosition();
+        int backLeftPosition =  back_left_wheel.getCurrentPosition();
+        int backRightPosition  = back_right_wheel.getCurrentPosition();
+
+        double rampDownPercent = 0.8;
+
+        front_left_wheel.setTargetPosition(frontLeftPosition + distance);
+        front_right_wheel.setTargetPosition(frontRightPosition + distance);
+        back_left_wheel.setTargetPosition(backLeftPosition + distance);
+        back_right_wheel.setTargetPosition(backRightPosition + distance);
+
+        front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        front_left_wheel.setPower(power);
+        front_right_wheel.setPower(power);
+        back_left_wheel.setPower(power);
+        back_right_wheel.setPower(power);
+
+        while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
+            sleep(5);
+            if (rampDown) {
+                rampDown(distance, rampDownPercent);
+            }
+        }
+        stopNow();
+    }
+
+    public void autoRotate(int distance, double power, boolean rampDown) {
+
+        int frontLeftPosition = front_left_wheel.getCurrentPosition();
+        int frontRightPosition= front_right_wheel.getCurrentPosition();
+        int backLeftPosition =  back_left_wheel.getCurrentPosition();
+        int backRightPosition  = back_right_wheel.getCurrentPosition();
+
+        double rampDownPercent = 0.8;
+
+        front_left_wheel.setTargetPosition(frontLeftPosition + distance);
+        front_right_wheel.setTargetPosition(frontRightPosition + distance);
+        back_left_wheel.setTargetPosition(backLeftPosition - distance);
+        back_right_wheel.setTargetPosition(backRightPosition - distance);
+
+        front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        front_left_wheel.setPower(power);
+        front_right_wheel.setPower(power);
+        back_left_wheel.setPower(power);
+        back_right_wheel.setPower(power);
+
+        while(front_left_wheel.isBusy() && front_right_wheel.isBusy() && back_left_wheel.isBusy() && back_right_wheel.isBusy()){
+            sleep(5);
+            if (rampDown) {
+                rampDown(distance, rampDownPercent);
+            }
+        }
+        stopNow();
+    }
+
 
     private void sleep(long ms){
         try {

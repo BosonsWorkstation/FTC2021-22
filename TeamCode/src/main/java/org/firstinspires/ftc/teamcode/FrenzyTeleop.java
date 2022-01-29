@@ -26,7 +26,7 @@ public class FrenzyTeleop extends LinearOpMode {
 
         boolean armServoOpen = false;
         boolean dpadOn = false;
-        driveTrain.runArmServo(false);
+        driveTrain.runArmServo(true);
 
         waitForStart();
         armThread(driveTrain);
@@ -47,8 +47,8 @@ public class FrenzyTeleop extends LinearOpMode {
                 moveValue = gamepad1.left_stick_y / 2;
                 turnValue = gamepad1.right_stick_x / 2;
 //TODO
-//                this.driveTrain.drive(crabValue, moveValue, turnValue, maxPower);
-//                idle();
+                this.driveTrain.drive(crabValue, moveValue, turnValue, maxPower);
+                idle();
 
 
             } else {
@@ -60,8 +60,8 @@ public class FrenzyTeleop extends LinearOpMode {
                 moveValue = gamepad1.left_stick_y * 2;
                 turnValue = gamepad1.right_stick_x;
 
-//                this.driveTrain.drive(crabValue, moveValue, turnValue, maxPower);
-//                idle();
+                this.driveTrain.drive(crabValue, moveValue, turnValue, maxPower);
+                idle();
             }
 
 
@@ -104,10 +104,12 @@ public class FrenzyTeleop extends LinearOpMode {
 
             if (gamepad2.right_trigger > 0) {
 
-                if (driveTrain.linearColor.blue() > 1000) {
+                if (driveTrain.linearColor.blue() > 1000 && gamepad2.right_trigger > 0) {
                     driveTrain.linearStop();
-                } else {
-                    power = gamepad2.right_trigger;
+                }
+                else
+                {
+                    power = -gamepad2.right_trigger;
                     if (power > 0.4) {
                         power = 0.4;
                     }
@@ -116,7 +118,7 @@ public class FrenzyTeleop extends LinearOpMode {
             }
 
             if (gamepad2.left_trigger > 0) {
-                power = -gamepad2.left_trigger;
+                power = gamepad2.left_trigger;
                 if (power > 0.4) {
                     power = 0.4;
                 }
@@ -196,16 +198,18 @@ public class FrenzyTeleop extends LinearOpMode {
                 boolean armServoOpen = false;
                 while (opModeIsActive()) {
                     if (gamepad1.right_bumper || gamepad2.right_bumper) {
-                        driveTrain.runArmServo(armServoOpen);
-                        sleep(250);
-                        if (armServoOpen) {
-                            armServoOpen = false;
-                        } else {
-                            armServoOpen = true;
-                        }
+                        driveTrain.runArmServo(false);
+                        sleep(20);
+//                        sleep(250);
+//                        if (armServoOpen) {
+//                            armServoOpen = false;
+//                        } else {
+//                            armServoOpen = true;
+//                        }
                     } else {
                         sleep(20);
-                        driveTrain.runArmServo(false);
+                        driveTrain.runArmServo(true);
+//                        sleep(250);
                     }
                 }
             }
