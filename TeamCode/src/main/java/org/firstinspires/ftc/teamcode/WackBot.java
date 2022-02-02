@@ -135,7 +135,7 @@ public class WackBot {
 
     public void runArmServo(boolean armServoOpen){
         if(armServoOpen){
-            armServoL.setPosition(0.37);
+            armServoL.setPosition(0.27);
             //ADIN ARM
 //            armServoR.setPosition(0.10);
             //LUKE ARM

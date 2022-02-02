@@ -82,7 +82,7 @@ public class FrenzyDriveTrain {
         back_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_left_wheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -149,22 +149,22 @@ public class FrenzyDriveTrain {
         }
     }
 
-    public void runArmServo(boolean armServoOpen){
-        if(armServoOpen == true){
+    public void runArmServo(boolean armServoClosed){
+        if(armServoClosed == true){
 //            armServoL.setPosition(0.75);
             //ADIN ARM
 //            armServoR.setPosition(0.30);
             //LUKE ARM
-            armServoR.setPosition(0.5);
+            armServoR.setPosition(0.9);
 
 //            return;
         }
-        if(armServoOpen == false){
+        if(armServoClosed == false){
 //            armServoL.setPosition(1.0);
             //ADIN ARM
 //            armServoR.setPosition(0.50);
             //LUKE ARM
-            armServoR.setPosition(0.3);
+            armServoR.setPosition(0.6);
 //            return;
         }
     }
@@ -187,15 +187,12 @@ public class FrenzyDriveTrain {
 
     }
 
-    public void autoLinearDown(double power, long time){
+    public void autoLinearDown(double power){
         while(linearColorDown.blue() < 900) {
             linearR.setPower(power);
             linearL.setPower(power);
-
-            sleep(time);
-
-            break;
         }
+        linearStop();
     }
 
     public void linearStop(){
@@ -210,11 +207,11 @@ public class FrenzyDriveTrain {
 //    }
 
     public void armUp() {
-        arm.setPower(-0.1);
+        arm.setPower(0.1);
     }
 
     public void armDown() {
-        arm.setPower(0.1);
+        arm.setPower(-0.1);
     }
 
     public void armStop() {
@@ -223,6 +220,10 @@ public class FrenzyDriveTrain {
 
     public void runFly(){
         fly.setPower(0.38);
+    }
+
+    public void flyFast(){
+        fly.setPower(0.8);
     }
 
     public void flyStop(){
@@ -281,7 +282,7 @@ public class FrenzyDriveTrain {
 //        telemetry.addData("crab val", crabValue);
 //        telemetry.addData("move val", moveValue);
 //        telemetry.addData("turn val", turnValue);
-        telemetry.addData("Blue Val", linearColorTop.blue());
+        telemetry.addData("Blue Val", linearColorDown.blue());
         telemetry.addData("Magnitude", Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)));
         telemetry.addData("crab val", crabValue);
         telemetry.addData("move val", moveValue);

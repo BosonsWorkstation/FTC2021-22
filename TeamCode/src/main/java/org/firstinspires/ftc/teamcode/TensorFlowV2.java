@@ -113,10 +113,15 @@ public class TensorFlowV2 extends LinearOpMode {
                         sleep(500);
 
                         this.driveTrain.runFly();
-                        sleep(3200);
+                        sleep(1500);
+                        this.driveTrain.flyStop();
+                        sleep(300);
+
+                        this.driveTrain.flyFast();
+                        sleep(800);
                         this.driveTrain.flyStop();
 
-                        this.driveTrain.autoCrab(-3400, 0.5, true);
+                        this.driveTrain.autoCrab(-3300, 0.5, true);
                         sleep(500);
 
                         this.driveTrain.autoRotate(-200, 0.8, false);
@@ -124,9 +129,9 @@ public class TensorFlowV2 extends LinearOpMode {
 
 
                         if(firstPos){
-                            this.driveTrain.autoMove(1000, 0.5, true);
+                            this.driveTrain.autoMove(1100, 0.5, true);
 
-                            this.driveTrain.autoLinearUp(0.2, 1500);
+                            this.driveTrain.autoLinearUp(0.2, 700);
 
                             level = 1;
 //                            sleep(1000);
@@ -134,7 +139,7 @@ public class TensorFlowV2 extends LinearOpMode {
                         if(secondPos){
                             this.driveTrain.autoMove(1425, 0.5, true);
 
-                            this.driveTrain.autoLinearUp(0.2, 1500);
+                            this.driveTrain.autoLinearUp(0.2, 1200);
 
                             level = 2;
 //                            sleep(1500);
@@ -142,12 +147,13 @@ public class TensorFlowV2 extends LinearOpMode {
                         if(thirdPos){
                             this.driveTrain.autoMove(1400, 0.5, true);
 
-                            this.driveTrain.autoLinearUp(0.2, 2300);
+                            this.driveTrain.autoLinearUp(0.2, 2200);
 
                             level = 3;
 //                            sleep(2000);
                         }
                         if(!thirdPos && !secondPos & !firstPos){
+                            this.driveTrain.autoMove(1400, 0.5, true);
                             this.driveTrain.autoLinearUp(0.2, 2000);
                         }
 
@@ -155,8 +161,10 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.linearStop();
 
                         this.driveTrain.runArmServo(false);
-
                         sleep(300);
+
+                        this.driveTrain.runArmServo(true);
+                        sleep(200);
 
                         if (level == 3 || level == 2){
                             this.driveTrain.autoMove(-450, 0.5, true);
@@ -170,30 +178,34 @@ public class TensorFlowV2 extends LinearOpMode {
 //                        this.driveTrain.autoCrab(-1200, 0.5, true);
 //                        sleep(500);
 
-                        this.driveTrain.autoCrab(-4700, 0.8, false);
+                        this.driveTrain.autoCrab(-5000, 0.8, false);
                         sleep(500);
 
-                        this.driveTrain.autoMove(-500, 0.8, true);
+                        this.driveTrain.autoMove(-700, 0.8, true);
                         sleep(500);
 
                         this.driveTrain.autoRotate(-1900, 0.3, false);
                         sleep(500);
 
-                        this.driveTrain.runArmServo(true);
-                        sleep(200);
 
-                        if (level == 1){
-                            this.driveTrain.autoLinearDown(0.2, 200);
-                        }
-                        if (level == 2){
-                            this.driveTrain.autoLinearDown(0.2, 200);
-                        }
-                        if (level == 3){
-                            this.driveTrain.autoLinearDown(0.2, 800);
-                        }
+//                        if (level == 1){
+//                            this.driveTrain.autoLinearDown(0.2, 200);
+//                        }
+//                        if (level == 2){
+//                            this.driveTrain.autoLinearDown(0.2, 200);
+//                        }
+//                        if (level == 3){
+//                            this.driveTrain.autoLinearDown(0.2, 800);
+//                        }
 
-                        this.driveTrain.armUp();
-                        sleep(900);
+                        this.driveTrain.autoLinearDown(0.2);
+
+                        this.driveTrain.armDown();
+                        sleep(1980);
+                        this.driveTrain.armStop();
+
+                        this.sleep(200);
+                        this.driveTrain.linearStop();
 
                     }
                 }
