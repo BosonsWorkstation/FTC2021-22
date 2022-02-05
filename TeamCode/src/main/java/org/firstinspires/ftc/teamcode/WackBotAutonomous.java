@@ -18,13 +18,41 @@ public class WackBotAutonomous extends LinearOpMode {
         //this.driveTrain.getHeading();
         //this.driveTrain.reset_angle();
 
-       // this.driveTrain.runArmServo(false);
+        //this.driveTrain.runArmServo(false);
 
         waitForStart();
-
+this.driveTrain.runArmServo(true);
         this.driveTrain.autoMove(500,.5,true);
         sleep(500);
+        this.driveTrain.autoCrab(400,0.5,true);
+        sleep(500);
 
+        this.driveTrain.runFly();
+        sleep(3000);
+        this.driveTrain.flyStop();
+
+        this.driveTrain.autoCrab(-1300,0.5, true);
+this.driveTrain.autoMove(-300,0.5,true);
+sleep(500);
+
+this.driveTrain.armUp();
+sleep(1500);
+this.driveTrain.armStop();
+
+this.driveTrain.autoMove(600,0.5,true);
+sleep(500);
+
+this.driveTrain.runArmServo(true);
+sleep(1000);
+this.driveTrain.runArmServo(false);
+
+this.driveTrain.autoMove(-750,0.5,true);
+sleep(500);
+this.driveTrain.autoCrab(-750,0.5,true);
+this.driveTrain.simpleRotate(4);
+sleep(2000);
+this.driveTrain.simpleRotate(0);
+// how to use "this.driveTrain.autoRotate();"?
         /*this.driveTrain.autoCrab(1350, 0.5, true);
         sleep(500);
 

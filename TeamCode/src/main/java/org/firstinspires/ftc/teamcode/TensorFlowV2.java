@@ -109,7 +109,7 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.autoMove(500,.5,true);
                         sleep(500);
 
-                        this.driveTrain.autoCrab(1400, 0.5, true);
+                        this.driveTrain.autoCrab(1475, 0.5, true);
                         sleep(500);
 
                         this.driveTrain.runFly();
@@ -121,15 +121,16 @@ public class TensorFlowV2 extends LinearOpMode {
                         sleep(800);
                         this.driveTrain.flyStop();
 
-                        this.driveTrain.autoCrab(-3300, 0.5, true);
+                        //TODO WAS TRUE
+                        this.driveTrain.autoCrab(-3350, 0.5, false);
                         sleep(500);
 
-                        this.driveTrain.autoRotate(-200, 0.8, false);
+                        this.driveTrain.autoRotate(-150, 0.8, false);
                         sleep(500);
 
 
                         if(firstPos){
-                            this.driveTrain.autoMove(1100, 0.5, true);
+                            this.driveTrain.autoMove(1150, 0.5, true);
 
                             this.driveTrain.autoLinearUp(0.2, 700);
 
@@ -145,20 +146,21 @@ public class TensorFlowV2 extends LinearOpMode {
 //                            sleep(1500);
                         }
                         if(thirdPos){
-                            this.driveTrain.autoMove(1400, 0.5, true);
+                            this.driveTrain.autoMove(1330, 0.5, true);
 
-                            this.driveTrain.autoLinearUp(0.2, 2200);
+                            this.driveTrain.autoLinearUp(0.2, 2450);
 
                             level = 3;
 //                            sleep(2000);
                         }
-                        if(!thirdPos && !secondPos & !firstPos){
+                        if(!thirdPos && !secondPos && !firstPos){
                             this.driveTrain.autoMove(1400, 0.5, true);
                             this.driveTrain.autoLinearUp(0.2, 2000);
                         }
 
 
                         this.driveTrain.linearStop();
+                        sleep(300);
 
                         this.driveTrain.runArmServo(false);
                         sleep(300);
@@ -181,7 +183,7 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.autoCrab(-5000, 0.8, false);
                         sleep(500);
 
-                        this.driveTrain.autoMove(-700, 0.8, true);
+                        this.driveTrain.autoMove(-900, 0.8, true);
                         sleep(500);
 
                         this.driveTrain.autoRotate(-1900, 0.3, false);
