@@ -39,7 +39,7 @@ public class FrenzyTeleop extends LinearOpMode {
             double turnValue = 0.0;
             double maxPower;
  
-            if (gamepad1.left_bumper) {
+            if (gamepad1.y) {
 
                 maxPower = 0.6;
 
@@ -213,7 +213,7 @@ public class FrenzyTeleop extends LinearOpMode {
 //                            armServoOpen = true;
 //                        }
                     } else {
-                        sleep(20);
+//                        sleep(20);
                         driveTrain.runArmServo(true);
 //                        sleep(250);
                     }

@@ -109,7 +109,7 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.autoMove(500,.5,true);
                         sleep(500);
 
-                        this.driveTrain.autoCrab(1475, 0.5, true);
+                        this.driveTrain.autoCrab(1350, 0.5, true);
                         sleep(500);
 
                         this.driveTrain.runFly();
@@ -122,15 +122,15 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.flyStop();
 
                         //TODO WAS TRUE
-                        this.driveTrain.autoCrab(-3350, 0.5, false);
+                        this.driveTrain.autoCrab(-3200, 0.5, false);
                         sleep(500);
 
-                        this.driveTrain.autoRotate(-150, 0.8, false);
+                        this.driveTrain.autoRotate(-200, 0.3, true);
                         sleep(500);
 
 
                         if(firstPos){
-                            this.driveTrain.autoMove(1150, 0.5, true);
+                            this.driveTrain.autoMove(1100, 0.5, true);
 
                             this.driveTrain.autoLinearUp(0.2, 700);
 
@@ -173,7 +173,7 @@ public class TensorFlowV2 extends LinearOpMode {
                             sleep(500);
                         }
                         if (level == 1){
-                            this.driveTrain.autoMove(-100, 0.5, true);
+                            this.driveTrain.autoMove(100, 0.5, true);
                         }
 
 
@@ -186,7 +186,7 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.autoMove(-900, 0.8, true);
                         sleep(500);
 
-                        this.driveTrain.autoRotate(-1900, 0.3, false);
+                        this.driveTrain.autoRotate(-2000, 0.3, false);
                         sleep(500);
 
 

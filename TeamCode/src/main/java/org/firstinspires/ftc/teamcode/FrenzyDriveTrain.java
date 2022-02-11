@@ -155,7 +155,7 @@ public class FrenzyDriveTrain {
             //ADIN ARM
 //            armServoR.setPosition(0.30);
             //LUKE ARM
-            armServoR.setPosition(0.9);
+            armServoR.setPosition(1.0);
 
 //            return;
         }
@@ -164,7 +164,7 @@ public class FrenzyDriveTrain {
             //ADIN ARM
 //            armServoR.setPosition(0.50);
             //LUKE ARM
-            armServoR.setPosition(0.6);
+            armServoR.setPosition(0.7);
 //            return;
         }
     }
