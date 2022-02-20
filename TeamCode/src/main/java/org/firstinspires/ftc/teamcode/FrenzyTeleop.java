@@ -39,13 +39,13 @@ public class FrenzyTeleop extends LinearOpMode {
             double turnValue = 0.0;
             double maxPower;
  
-            if (gamepad1.y) {
+            if (gamepad1.left_trigger > 0.2) {
 
-                maxPower = 0.6;
+                maxPower = 0.8;
 
-                crabValue = gamepad1.left_stick_x / 2;
-                moveValue = gamepad1.left_stick_y / 2;
-                turnValue = gamepad1.right_stick_x / 2;
+                crabValue = gamepad1.left_stick_x / 1.6;
+                moveValue = gamepad1.left_stick_y / 1.6;
+                turnValue = gamepad1.right_stick_x / 1.6;
 //TODO
                 this.driveTrain.drive(crabValue, moveValue, turnValue, maxPower);
                 idle();
@@ -110,10 +110,10 @@ public class FrenzyTeleop extends LinearOpMode {
                 else
                 {
                     power = -gamepad2.right_trigger;
-                    if (power > 0.4) {
-                        power = 0.4;
+                    if (power > 0.5) {
+                        power = 0.5;
                     }
-                    driveTrain.linear(power / 4);
+                    driveTrain.linear(power / 2);
                 }
             }
 
@@ -124,10 +124,10 @@ public class FrenzyTeleop extends LinearOpMode {
                 else
                 {
                     power = gamepad2.left_trigger;
-                    if (power > 0.4) {
-                        power = 0.4;
+                    if (power > 0.5) {
+                        power = 0.5;
                     }
-                    driveTrain.linear(power / 4);
+                    driveTrain.linear(power / 2);
                 }
             }
 
@@ -142,12 +142,17 @@ public class FrenzyTeleop extends LinearOpMode {
             }
 
             if (gamepad2.x) {
-                this.driveTrain.runFly();
+                this.driveTrain.flyFast();
             }
+
+            if (gamepad2.y){
+                this.driveTrain.flyFast();
+            }
+
             if (gamepad2.b) {
                 this.driveTrain.runFlyRed();
             }
-            if (!gamepad2.x && !gamepad2.b){
+            if (!gamepad2.x && !gamepad2.b && !gamepad2.y){
                 this.driveTrain.flyStop();
             }
 
@@ -192,6 +197,10 @@ public class FrenzyTeleop extends LinearOpMode {
 //                this.driveTrain.autoCrab(100, 0.5, true);
                 this.driveTrain.stopNow();
             }
+
+//            if (gamepad2.right_bumper) {
+//                this.driveTrain.flyFast();
+//            }
 
 
         }

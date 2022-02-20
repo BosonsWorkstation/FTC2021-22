@@ -90,16 +90,21 @@ public class TensorFlowV2 extends LinearOpMode {
                         boolean secondPos = false;
                         boolean thirdPos = false;
                         for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getRight() < 200) {
-                                firstPos = true;
-                            }
-                            if (recognition.getRight() > 200 && recognition.getRight() < 400) {
-                                secondPos = true;
-                            }
-                            if (recognition.getRight() > 500) {
+                            if (recognition.getRight() <= 200) {
                                 thirdPos = true;
                             }
+                            else if (recognition.getRight() >= 500) {
+                                firstPos = true;
+                            }
+                            else {
+                                secondPos = true;
+                            }
+//                            if (recognition.getRight() > 200 && recognition.getRight() < 500) {
+//                                secondPos = true;
+//                            }
+                            telemetry.addData("Element Position", recognition.getRight());
                         }
+
 
                         telemetry.addData("first pos", firstPos);
                         telemetry.addData("second pos", secondPos);
@@ -109,7 +114,7 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.autoMove(500,.5,true);
                         sleep(500);
 
-                        this.driveTrain.autoCrab(1350, 0.5, true);
+                        this.driveTrain.autoCrab(1500, 0.5, true);
                         sleep(500);
 
                         this.driveTrain.runFly();
@@ -117,20 +122,20 @@ public class TensorFlowV2 extends LinearOpMode {
                         this.driveTrain.flyStop();
                         sleep(300);
 
-                        this.driveTrain.flyFast();
+                        this.driveTrain.runFly();
                         sleep(800);
                         this.driveTrain.flyStop();
 
-                        //TODO WAS TRUE
-                        this.driveTrain.autoCrab(-3200, 0.5, false);
+                        //TODO WAS 2870
+                        this.driveTrain.autoCrab(-3010, 0.5, false);
                         sleep(500);
 
-                        this.driveTrain.autoRotate(-200, 0.3, true);
-                        sleep(500);
+//                        this.driveTrain.autoRotate(-125, 0.5, true);
+//                        sleep(500);
 
 
                         if(firstPos){
-                            this.driveTrain.autoMove(1100, 0.5, true);
+                            this.driveTrain.autoMove(1150, 0.5, true);
 
                             this.driveTrain.autoLinearUp(0.2, 700);
 
@@ -138,7 +143,7 @@ public class TensorFlowV2 extends LinearOpMode {
 //                            sleep(1000);
                         }
                         if(secondPos){
-                            this.driveTrain.autoMove(1425, 0.5, true);
+                            this.driveTrain.autoMove(1440, 0.5, true);
 
                             this.driveTrain.autoLinearUp(0.2, 1200);
 
@@ -146,17 +151,17 @@ public class TensorFlowV2 extends LinearOpMode {
 //                            sleep(1500);
                         }
                         if(thirdPos){
-                            this.driveTrain.autoMove(1330, 0.5, true);
+                            this.driveTrain.autoMove(1380, 0.5, true);
 
                             this.driveTrain.autoLinearUp(0.2, 2450);
 
                             level = 3;
 //                            sleep(2000);
                         }
-                        if(!thirdPos && !secondPos && !firstPos){
-                            this.driveTrain.autoMove(1400, 0.5, true);
-                            this.driveTrain.autoLinearUp(0.2, 2000);
-                        }
+//                        if(!thirdPos && !secondPos && !firstPos){
+//                            this.driveTrain.autoMove(1400, 0.5, true);
+//                            this.driveTrain.autoLinearUp(0.2, 2000);
+//                        }
 
 
                         this.driveTrain.linearStop();
@@ -173,37 +178,28 @@ public class TensorFlowV2 extends LinearOpMode {
                             sleep(500);
                         }
                         if (level == 1){
-                            this.driveTrain.autoMove(100, 0.5, true);
+//                            this.driveTrain.autoMove(100, 0.5, true);
                         }
 
+                        this.driveTrain.autoRotate(-200, 0.5, true);
+                        sleep(500);
 
 //                        this.driveTrain.autoCrab(-1200, 0.5, true);
 //                        sleep(500);
 
-                        this.driveTrain.autoCrab(-5000, 0.8, false);
+                        this.driveTrain.autoCrab(-5100, 0.8, false);
                         sleep(500);
 
-                        this.driveTrain.autoMove(-900, 0.8, true);
-                        sleep(500);
+//                        this.driveTrain.autoMove(-900, 0.8, true);
+//                        sleep(500);
 
-                        this.driveTrain.autoRotate(-2000, 0.3, false);
-                        sleep(500);
-
-
-//                        if (level == 1){
-//                            this.driveTrain.autoLinearDown(0.2, 200);
-//                        }
-//                        if (level == 2){
-//                            this.driveTrain.autoLinearDown(0.2, 200);
-//                        }
-//                        if (level == 3){
-//                            this.driveTrain.autoLinearDown(0.2, 800);
-//                        }
+//                        this.driveTrain.autoRotate(-2000, 0.3, false);
+//                        sleep(500);
 
                         this.driveTrain.autoLinearDown(0.2);
 
                         this.driveTrain.armDown();
-                        sleep(1980);
+                        sleep(1500);
                         this.driveTrain.armStop();
 
                         this.sleep(200);

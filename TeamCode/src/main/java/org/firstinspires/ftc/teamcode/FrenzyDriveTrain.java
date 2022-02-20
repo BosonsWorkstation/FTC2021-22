@@ -155,7 +155,7 @@ public class FrenzyDriveTrain {
             //ADIN ARM
 //            armServoR.setPosition(0.30);
             //LUKE ARM
-            armServoR.setPosition(1.0);
+            armServoR.setPosition(0.67);
 
 //            return;
         }
@@ -164,7 +164,7 @@ public class FrenzyDriveTrain {
             //ADIN ARM
 //            armServoR.setPosition(0.50);
             //LUKE ARM
-            armServoR.setPosition(0.7);
+            armServoR.setPosition(0.5);
 //            return;
         }
     }
@@ -223,7 +223,7 @@ public class FrenzyDriveTrain {
     }
 
     public void flyFast(){
-        fly.setPower(0.8);
+        fly.setPower(1.0);
     }
 
     public void flyStop(){
