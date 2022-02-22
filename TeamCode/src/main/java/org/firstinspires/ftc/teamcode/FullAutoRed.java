@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@Autonomous(name = "Full Auto Blue", group = "Linear OpMode")
-public class TensorFlowV2 extends LinearOpMode {
+@Autonomous(name = "Full Auto Red", group = "Linear OpMode")
+public class FullAutoRed extends LinearOpMode {
 
     private FrenzyDriveTrain driveTrain;
     private static final FrenzyDriveTrain.DirectionEnum direction = FrenzyDriveTrain.DirectionEnum.WEST;
@@ -68,149 +68,151 @@ public class TensorFlowV2 extends LinearOpMode {
 
         if (opModeIsActive()) {
 //            while (opModeIsActive()) {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
 //                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        // step through the list of recognitions and display boundary info.
-                        int i = 0;
-                        for (Recognition recognition : updatedRecognitions) {
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                    recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                    recognition.getRight(), recognition.getBottom());
-                            i++;
-                        }
-                        telemetry.update();
+                    // step through the list of recognitions and display boundary info.
+                    int i = 0;
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                recognition.getLeft(), recognition.getTop());
+                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                recognition.getRight(), recognition.getBottom());
+                        i++;
+                    }
+                    telemetry.update();
 
-                        boolean firstPos = false;
-                        boolean secondPos = false;
-                        boolean thirdPos = false;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getRight() <= 200) {
-                                thirdPos = true;
-                            }
-                            else if (recognition.getRight() >= 500) {
-                                firstPos = true;
-                            }
-                            else {
-                                secondPos = true;
-                            }
+                    boolean firstPos = false;
+                    boolean secondPos = false;
+                    boolean thirdPos = false;
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getRight() <= 200) {
+                            firstPos = true;
+                        }
+                        else if (recognition.getRight() >= 500) {
+                            thirdPos = true;
+                        }
+                        else {
+                            secondPos = true;
+                        }
 //                            if (recognition.getRight() > 200 && recognition.getRight() < 500) {
 //                                secondPos = true;
 //                            }
-                            telemetry.addData("Element Position", recognition.getRight());
-                        }
+                        telemetry.addData("Element Position", recognition.getRight());
+                    }
 
 
-                        telemetry.addData("first pos", firstPos);
-                        telemetry.addData("second pos", secondPos);
-                        telemetry.addData("third pos", thirdPos);
-                        telemetry.update();
+                    telemetry.addData("first pos", firstPos);
+                    telemetry.addData("second pos", secondPos);
+                    telemetry.addData("third pos", thirdPos);
+                    telemetry.update();
 
-                        this.driveTrain.autoMove(500,.5,true);
-                        sleep(500);
+                    this.driveTrain.autoMove(500,.5,true);
+                    sleep(300);
 
-                        this.driveTrain.autoCrab(1500, 0.5, true);
-                        sleep(500);
+                    this.driveTrain.autoRotate(-1800, 0.5, true);
+                    sleep(300);
 
-//                        this.driveTrain.flyAutoBlue(2000, 1.0);
-                        this.driveTrain.flyFast();
-                        sleep(1500);
-                        this.driveTrain.flyStop();
-                        sleep(300);
+                    this.driveTrain.autoMove(-1500, 0.5, true);
+                    sleep(300);
 
-//                        this.driveTrain.flyAutoBlue(1000, 1.0);
-                        this.driveTrain.flyFast();
-                        sleep(800);
-                        this.driveTrain.flyStop();
+                    this.driveTrain.runFlyRed();
+                    sleep(1500);
+                    this.driveTrain.flyStop();
+                    sleep(300);
 
-                        //TODO WAS 2870
-                        this.driveTrain.autoCrab(-3050, 0.5, false);
-                        sleep(500);
+                    this.driveTrain.runFlyRed();
+                    sleep(800);
+                    this.driveTrain.flyStop();
 
+                    //TODO WAS 2870
+                    this.driveTrain.autoMove(3010, 0.5, false);
+                    sleep(500);
+
+                    this.driveTrain.autoRotate(1800, 0.5, true);
 //                        this.driveTrain.autoRotate(-125, 0.5, true);
 //                        sleep(500);
 
 
-                        if(firstPos){
-                            this.driveTrain.autoMove(1150, 0.5, true);
+                    if(firstPos){
+                        this.driveTrain.autoMove(1150, 0.5, true);
 
-                            this.driveTrain.autoLinearUp(0.2, 700);
+                        this.driveTrain.autoLinearUp(0.2, 700);
 
-                            level = 1;
+                        level = 1;
 //                            sleep(1000);
-                        }
-                        if(secondPos){
-                            this.driveTrain.autoMove(1440, 0.5, true);
+                    }
+                    if(secondPos){
+                        this.driveTrain.autoMove(1440, 0.5, true);
 
-                            this.driveTrain.autoLinearUp(0.2, 1200);
+                        this.driveTrain.autoLinearUp(0.2, 1200);
 
-                            level = 2;
+                        level = 2;
 //                            sleep(1500);
-                        }
-                        if(thirdPos){
-                            this.driveTrain.autoMove(1380, 0.5, true);
+                    }
+                    if(thirdPos){
+                        this.driveTrain.autoMove(1380, 0.5, true);
 
-                            this.driveTrain.autoLinearUp(0.2, 2450);
+                        this.driveTrain.autoLinearUp(0.2, 2450);
 
-                            level = 3;
+                        level = 3;
 //                            sleep(2000);
-                        }
+                    }
 //                        if(!thirdPos && !secondPos && !firstPos){
 //                            this.driveTrain.autoMove(1400, 0.5, true);
 //                            this.driveTrain.autoLinearUp(0.2, 2000);
 //                        }
 
 
-                        this.driveTrain.linearStop();
-                        sleep(300);
+                    this.driveTrain.linearStop();
+                    sleep(300);
 
-                        this.driveTrain.runArmServo(false);
-                        sleep(300);
+                    this.driveTrain.runArmServo(false);
+                    sleep(300);
 
-                        this.driveTrain.runArmServo(true);
-                        sleep(200);
+                    this.driveTrain.runArmServo(true);
+                    sleep(200);
 
-                        if (level == 3 || level == 2){
-                            this.driveTrain.autoMove(-450, 0.5, true);
-                            sleep(500);
-                        }
-                        if (level == 1){
-//                            this.driveTrain.autoMove(100, 0.5, true);
-                        }
-
-                        this.driveTrain.autoRotate(-200, 0.5, true);
+                    if (level == 3 || level == 2){
+                        this.driveTrain.autoMove(-450, 0.5, true);
                         sleep(500);
+                    }
+                    if (level == 1){
+//                            this.driveTrain.autoMove(100, 0.5, true);
+                    }
+
+                    this.driveTrain.autoRotate(200, 0.5, true);
+                    sleep(500);
 
 //                        this.driveTrain.autoCrab(-1200, 0.5, true);
 //                        sleep(500);
 
-                        this.driveTrain.autoCrab(-5100, 0.8, false);
-                        sleep(500);
+                    this.driveTrain.autoCrab(5100, 0.8, false);
+                    sleep(500);
 
 //                        this.driveTrain.autoMove(-900, 0.8, true);
 //                        sleep(500);
 
-                        this.driveTrain.autoRotate(-1900, 0.3, false);
-                        sleep(500);
+//                        this.driveTrain.autoRotate(-2000, 0.3, false);
+//                        sleep(500);
 
-                        this.driveTrain.autoLinearDown(0.2);
+                    this.driveTrain.autoLinearDown(0.2);
 
-                        this.driveTrain.armDown();
-                        sleep(1700);
-                        this.driveTrain.armStop();
+                    this.driveTrain.armDown();
+                    sleep(1500);
+                    this.driveTrain.armStop();
 
-                        this.sleep(200);
-                        this.driveTrain.linearStop();
+                    this.sleep(200);
+                    this.driveTrain.linearStop();
 
-                    }
                 }
             }
         }
+    }
 //    }
 
     /**

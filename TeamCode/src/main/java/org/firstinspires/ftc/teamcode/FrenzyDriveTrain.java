@@ -81,6 +81,7 @@ public class FrenzyDriveTrain {
         front_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        fly.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -219,18 +220,42 @@ public class FrenzyDriveTrain {
     }
 
     public void runFly(){
-        fly.setPower(0.38);
+        fly.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fly.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fly.setPower(0.5);
+    }
+
+    public void flyAutoBlue(int distance, double power){
+        int flyPosition = front_left_wheel.getCurrentPosition();
+
+        fly.setTargetPosition(flyPosition + distance);
+
+        fly.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fly.setPower(power);
+
+        while(fly.isBusy()){
+            sleep(5);
+        }
     }
 
     public void flyFast(){
         fly.setPower(1.0);
     }
 
+    public void flyFastRed(){
+        fly.setPower(-1.0);
+    }
+
     public void flyStop(){
         fly.setPower(0.0);
     }
 
-    public void runFlyRed() {fly.setPower(-0.5);}
+    public void runFlyRed() {
+        fly.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fly.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fly.setPower(-0.5);
+    }
 
 
 
@@ -429,10 +454,10 @@ public class FrenzyDriveTrain {
 
         double rampDownPercent = 0.8;
 
-        front_left_wheel.setTargetPosition(frontLeftPosition + distance);
+        front_left_wheel.setTargetPosition(frontLeftPosition - distance);
         front_right_wheel.setTargetPosition(frontRightPosition + distance);
         back_left_wheel.setTargetPosition(backLeftPosition - distance);
-        back_right_wheel.setTargetPosition(backRightPosition - distance);
+        back_right_wheel.setTargetPosition(backRightPosition + distance);
 
         front_left_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         front_right_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);

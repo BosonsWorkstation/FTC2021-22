@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Frenzy Teleop", group = "Linear Opmode")
 public class FrenzyTeleop extends LinearOpMode {
@@ -27,6 +28,9 @@ public class FrenzyTeleop extends LinearOpMode {
         boolean armServoOpen = false;
         boolean dpadOn = false;
         driveTrain.runArmServo(true);
+
+        driveTrain.fly.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        driveTrain.fly.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         armThread(driveTrain);
@@ -150,7 +154,7 @@ public class FrenzyTeleop extends LinearOpMode {
             }
 
             if (gamepad2.b) {
-                this.driveTrain.runFlyRed();
+                this.driveTrain.flyFastRed();
             }
             if (!gamepad2.x && !gamepad2.b && !gamepad2.y){
                 this.driveTrain.flyStop();
